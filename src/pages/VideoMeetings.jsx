@@ -33,11 +33,10 @@ export default function VideoMeetings({ user }) {
   const createRoom = async () => {
     setCreating(true);
     try {
-      // Generate a unique room name
       const roomName = `room-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
 
-      // IMPORTANT: Replace this URL with your actual Netlify site URL after deployment
-      const response = await fetch('https://your-site-name.netlify.app/.netlify/functions/create-room', {
+      // ✅ Updated fetch URL with your actual Netlify site
+      const response = await fetch('https://coruscating-chimera-4a3c5b.netlify.app/.netlify/functions/create-room', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ roomName, privacy: 'public' })
@@ -46,9 +45,8 @@ export default function VideoMeetings({ user }) {
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Failed to create room');
 
-      const roomUrl = data.url; // e.g., "https://your-subdomain.daily.co/room-name"
+      const roomUrl = data.url;
 
-      // Save to database
       const { error } = await supabase
         .from('video_meetings')
         .insert([{
@@ -63,7 +61,6 @@ export default function VideoMeetings({ user }) {
       setTopic('');
       setShowCreateModal(false);
       fetchMeetings();
-      // Optional: join immediately
       setCurrentRoom({ url: roomUrl, name: roomName });
     } catch (error) {
       toast.error('Failed to create meeting');

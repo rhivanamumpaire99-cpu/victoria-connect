@@ -80,9 +80,9 @@ function Home() {
               </Link>
             </div>
 
-            {/* Desktop Navigation (hidden on mobile) */}
+            {/* Desktop Navigation with horizontal scroll */}
             {user && (
-              <div className="hidden md:flex items-center space-x-6">
+              <div className="hidden md:flex items-center space-x-6 overflow-x-auto whitespace-nowrap max-w-full pb-1">
                 <Link to="/" className="text-white hover:text-[#FFD100] transition text-lg">Home</Link>
                 <Link to="/library" className="text-white hover:text-[#FFD100] transition text-lg">Library</Link>
                 <Link to="/confessions" className="text-white hover:text-[#FFD100] transition text-lg">Confessions</Link>

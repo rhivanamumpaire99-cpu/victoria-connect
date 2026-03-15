@@ -12,6 +12,8 @@ import Events from './pages/Events'
 import Profile from './pages/Profile'
 import VideoMeetings from './pages/VideoMeetings'
 import NotificationBell from './components/NotificationBell'
+import StudyGroups from './pages/StudyGroups/StudyGroups'
+import GroupDetail from './pages/StudyGroups/GroupDetail'
 import './App.css'
 
 function Home() {
@@ -91,6 +93,10 @@ function Home() {
                 <Link to="/video" className="text-white hover:text-[#FFD100] transition text-lg">
                   Video
                 </Link>
+                {/* Study Groups link */}
+                <Link to="/groups" className="text-white hover:text-[#FFD100] transition text-lg">
+                  Groups
+                </Link>
 
                 <NotificationBell user={user} />
 
@@ -166,6 +172,9 @@ function Home() {
               <Route path="/events" element={<Events user={user} profile={profile} />} />
               <Route path="/video" element={<VideoMeetings user={user} profile={profile} />} />
               <Route path="/profile/:id" element={<Profile user={user} />} />
+              {/* Study Groups routes */}
+              <Route path="/groups" element={<StudyGroups user={user} profile={profile} />} />
+              <Route path="/groups/:id" element={<GroupDetail user={user} />} />
             </>
           )}
         </Routes>

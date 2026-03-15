@@ -11,7 +11,18 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { roomName, privacy = 'public' } = JSON.parse(event.body);
+    const { roomName, privacy = 'public', properties = {} } = JSON.parse(event.body);
+
+    // Build room properties with defaults
+    const roomProperties = {
+      enable_chat: true,
+      enable_screenshare: true,
+      start_video_off: properties.start_video_off || false,
+      start_audio_off: properties.start_audio_off || false,
+      enable_knocking: properties.enable_knocking || false,
+      max_participants: properties.max_participants || 100,
+      ...properties
+    };
 
     const response = await fetch('https://api.daily.co/v1/rooms', {
       method: 'POST',
@@ -22,11 +33,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         name: roomName,
         privacy: privacy,
-        properties: {
-          enable_chat: true,
-          start_video_off: false,
-          start_audio_off: false
-        }
+        properties: roomProperties
       })
     });
 
@@ -38,6 +45,7 @@ exports.handler = async (event) => {
       body: JSON.stringify(data)
     };
   } catch (error) {
+    console.error('Error creating room:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })

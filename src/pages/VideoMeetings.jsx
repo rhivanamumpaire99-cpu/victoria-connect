@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { toast } from 'react-hot-toast';
-import { Video, Plus, Copy, ExternalLink } from 'lucide-react';
+import { Video, Plus, Copy, X } from 'lucide-react';
 
 export default function VideoMeetings({ user }) {
   const [meetings, setMeetings] = useState([]);
@@ -10,6 +10,12 @@ export default function VideoMeetings({ user }) {
   const [topic, setTopic] = useState('');
   const [creating, setCreating] = useState(false);
   const [currentRoom, setCurrentRoom] = useState(null);
+
+  // New meeting options state
+  const [startVideoOff, setStartVideoOff] = useState(false);
+  const [startAudioOff, setStartAudioOff] = useState(false);
+  const [enableKnocking, setEnableKnocking] = useState(false);
+  const [maxParticipants, setMaxParticipants] = useState(100);
 
   useEffect(() => {
     fetchMeetings();
@@ -35,11 +41,20 @@ export default function VideoMeetings({ user }) {
     try {
       const roomName = `room-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
 
-      // ✅ Updated fetch URL with your actual Netlify site
+      // Replace with your actual Netlify site URL
       const response = await fetch('https://coruscating-chimera-4a3c5b.netlify.app/.netlify/functions/create-room', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ roomName, privacy: 'public' })
+        body: JSON.stringify({
+          roomName,
+          privacy: 'public',
+          properties: {
+            start_video_off: startVideoOff,
+            start_audio_off: startAudioOff,
+            enable_knocking: enableKnocking,
+            max_participants: maxParticipants
+          }
+        })
       });
 
       const data = await response.json();
@@ -47,6 +62,7 @@ export default function VideoMeetings({ user }) {
 
       const roomUrl = data.url;
 
+      // Save to database
       const { error } = await supabase
         .from('video_meetings')
         .insert([{
@@ -59,6 +75,10 @@ export default function VideoMeetings({ user }) {
 
       toast.success('Meeting created!');
       setTopic('');
+      setStartVideoOff(false);
+      setStartAudioOff(false);
+      setEnableKnocking(false);
+      setMaxParticipants(100);
       setShowCreateModal(false);
       fetchMeetings();
       setCurrentRoom({ url: roomUrl, name: roomName });
@@ -78,6 +98,10 @@ export default function VideoMeetings({ user }) {
     toast.success('Link copied!');
   };
 
+  const closeRoom = () => {
+    setCurrentRoom(null);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -91,8 +115,8 @@ export default function VideoMeetings({ user }) {
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-4 bg-[#0033A0] text-white flex justify-between items-center">
           <h2 className="text-xl font-bold">Meeting: {currentRoom.name}</h2>
-          <button onClick={() => setCurrentRoom(null)} className="text-white hover:text-[#FFD100]">
-            Close
+          <button onClick={closeRoom} className="text-white hover:text-[#FFD100]">
+            <X className="w-6 h-6" />
           </button>
         </div>
         <iframe
@@ -153,6 +177,7 @@ export default function VideoMeetings({ user }) {
         </div>
       )}
 
+      {/* Create Meeting Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl w-full max-w-md p-6">
@@ -164,8 +189,51 @@ export default function VideoMeetings({ user }) {
               onChange={(e) => setTopic(e.target.value)}
               className="w-full p-2 border rounded-lg mb-4"
             />
+
+            {/* Options */}
+            <div className="space-y-3 mb-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={startVideoOff}
+                  onChange={(e) => setStartVideoOff(e.target.checked)}
+                />
+                Start with video off
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={startAudioOff}
+                  onChange={(e) => setStartAudioOff(e.target.checked)}
+                />
+                Start with audio off
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={enableKnocking}
+                  onChange={(e) => setEnableKnocking(e.target.checked)}
+                />
+                Enable waiting room (host must approve)
+              </label>
+              <div className="flex items-center gap-2">
+                <span className="text-sm">Max participants:</span>
+                <input
+                  type="number"
+                  min="1"
+                  max="500"
+                  value={maxParticipants}
+                  onChange={(e) => setMaxParticipants(parseInt(e.target.value) || 100)}
+                  className="border rounded px-2 py-1 w-20"
+                />
+              </div>
+            </div>
+
             <div className="flex justify-end gap-2">
-              <button onClick={() => setShowCreateModal(false)} className="px-4 py-2 text-gray-600">
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="px-4 py-2 text-gray-600"
+              >
                 Cancel
               </button>
               <button

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { ChevronLeft, MessageCircle, Edit, Trash } from 'lucide-react';
+import { ChevronLeft, MessageCircle, Trash } from 'lucide-react';
 
 export default function ItemDetail({ user }) {
   const { id } = useParams();

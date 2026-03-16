@@ -10,6 +10,7 @@ import Confessions from './pages/Confessions'
 import Polls from './pages/Polls'
 import Events from './pages/Events'
 import Profile from './pages/Profile'
+import EditProfile from './pages/EditProfile'
 import VideoMeetings from './pages/VideoMeetings'
 import NotificationBell from './components/NotificationBell'
 import StudyGroups from './pages/StudyGroups/StudyGroups'
@@ -171,6 +172,7 @@ function Home() {
               <Route path="/events" element={<Events user={user} profile={profile} />} />
               <Route path="/video" element={<VideoMeetings user={user} profile={profile} />} />
               <Route path="/profile/:id" element={<Profile user={user} />} />
+              <Route path="/profile/edit" element={<EditProfile user={user} profile={profile} />} />
               <Route path="/groups" element={<StudyGroups user={user} profile={profile} />} />
               <Route path="/groups/:id" element={<GroupDetail user={user} />} />
               <Route path="/marketplace" element={<Marketplace user={user} />} />

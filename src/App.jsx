@@ -81,25 +81,25 @@ function Home() {
               </Link>
             </div>
 
-            {/* Desktop Navigation with horizontal scroll */}
+            {/* Desktop Navigation – explicit margins */}
             {user && (
-              <div className="hidden md:flex items-center space-x-6 overflow-x-auto whitespace-nowrap max-w-full pb-1">
-                <Link to="/" className="text-white hover:text-[#FFD100] transition text-lg">Home</Link>
-                <Link to="/library" className="text-white hover:text-[#FFD100] transition text-lg">Library</Link>
-                <Link to="/confessions" className="text-white hover:text-[#FFD100] transition text-lg">Confessions</Link>
-                <Link to="/polls" className="text-white hover:text-[#FFD100] transition text-lg">Polls</Link>
-                <Link to="/events" className="text-white hover:text-[#FFD100] transition text-lg">Events</Link>
-                <Link to="/video" className="text-white hover:text-[#FFD100] transition text-lg">Video</Link>
-                <Link to="/groups" className="text-white hover:text-[#FFD100] transition text-lg">Groups</Link>
-                <Link to="/marketplace" className="text-white hover:text-[#FFD100] transition text-lg">Marketplace</Link>
+              <div className="hidden md:flex items-center overflow-x-auto max-w-full pb-1" style={{ gap: '1.5rem' }}>
+                <Link to="/" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Home</Link>
+                <Link to="/library" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Library</Link>
+                <Link to="/confessions" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Confessions</Link>
+                <Link to="/polls" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Polls</Link>
+                <Link to="/events" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Events</Link>
+                <Link to="/video" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Video</Link>
+                <Link to="/groups" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Groups</Link>
+                <Link to="/marketplace" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Marketplace</Link>
                 <NotificationBell user={user} />
-                <Link to={`/profile/${user.id}`} className="flex items-center gap-2 text-white hover:text-[#FFD100] transition">
+                <Link to={`/profile/${user.id}`} className="flex items-center gap-2 text-white hover:text-[#FFD100] transition whitespace-nowrap">
                   <div className="w-8 h-8 bg-[#FFD100] rounded-full flex items-center justify-center text-[#0033A0] font-bold">
                     {profile?.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                   </div>
                   <span className="hidden lg:inline">{profile?.full_name || 'Profile'}</span>
                 </Link>
-                <button onClick={handleLogout} className="bg-[#FFD100] text-[#0033A0] px-4 py-2 rounded-full hover:bg-yellow-400 transition font-semibold text-sm shadow">
+                <button onClick={handleLogout} className="bg-[#FFD100] text-[#0033A0] px-4 py-2 rounded-full hover:bg-yellow-400 transition font-semibold text-sm shadow whitespace-nowrap">
                   Logout
                 </button>
               </div>
@@ -145,6 +145,13 @@ function Home() {
           )}
         </div>
       </nav>
+
+      {/* Debug user info – remove later */}
+      {user && (
+        <div className="bg-yellow-100 p-2 text-center text-sm">
+          Logged in as: {user.email} | User ID: {user.id}
+        </div>
+      )}
 
       <main className="flex justify-center w-full px-4 py-6">
         <Routes>

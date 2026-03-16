@@ -71,7 +71,7 @@ function Home() {
       <nav className="bg-[#0033A0] text-white shadow-lg sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo and brand */}
+            {/* Logo */}
             <div className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-[#FFD100] rounded-lg flex items-center justify-center text-[#0033A0] font-bold text-xl shadow-md">
                 VU
@@ -81,9 +81,12 @@ function Home() {
               </Link>
             </div>
 
-            {/* Desktop Navigation – explicit margins */}
+            {/* Desktop navigation – inline styles for spacing */}
             {user && (
-              <div className="hidden md:flex items-center overflow-x-auto max-w-full pb-1" style={{ gap: '1.5rem' }}>
+              <div
+                className="hidden md:flex items-center overflow-x-auto max-w-full pb-1"
+                style={{ gap: '24px' }} // explicit gap, works without Tailwind
+              >
                 <Link to="/" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Home</Link>
                 <Link to="/library" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Library</Link>
                 <Link to="/confessions" className="text-white hover:text-[#FFD100] transition text-lg whitespace-nowrap">Confessions</Link>
@@ -118,7 +121,7 @@ function Home() {
               </div>
             )}
 
-            {/* Login button for non-authenticated (desktop) */}
+            {/* Login button */}
             {!user && (
               <button onClick={() => window.location.href = '/login'} className="bg-[#FFD100] text-[#0033A0] px-4 py-2 rounded-full hover:bg-yellow-400 transition font-semibold text-sm shadow">
                 Login
@@ -126,7 +129,7 @@ function Home() {
             )}
           </div>
 
-          {/* Mobile Navigation Dropdown */}
+          {/* Mobile dropdown */}
           {user && mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-[#FFD100]/30 space-y-2">
               <Link to="/" className="block py-2 text-white hover:text-[#FFD100] transition" onClick={() => setMobileMenuOpen(false)}>Home</Link>
@@ -146,10 +149,10 @@ function Home() {
         </div>
       </nav>
 
-      {/* Debug user info – remove later */}
+      {/* Debug bar – shows user is logged in */}
       {user && (
         <div className="bg-yellow-100 p-2 text-center text-sm">
-          Logged in as: {user.email} | User ID: {user.id}
+          ✅ Logged in as: {user.email} | User ID: {user.id}
         </div>
       )}
 
